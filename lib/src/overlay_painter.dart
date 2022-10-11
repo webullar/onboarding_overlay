@@ -69,7 +69,11 @@ class OverlayPainter extends CustomPainter {
       ..lineTo(0, size.height)
       ..close();
 
-    final Path holePath = shape.getOuterPath(hole);
+    final Path holePath = Path.combine(
+      PathOperation.intersect,
+      canvasPath,
+      shape.getOuterPath(hole),
+    );
     final EdgeInsets overlayInsets =
         EdgeInsets.all(size.width * kOverlayRatio * overlayAnimation);
     final Rect overlayRect = overlayInsets.inflateRect(
