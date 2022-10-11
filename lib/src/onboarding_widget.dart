@@ -24,6 +24,7 @@ class Onboarding extends StatefulWidget {
     this.debugBoundaries = false,
     this.scaleHeight = 1.0,
     this.scaleWidth = 1.0,
+    this.stepperBuilder,
   }) : super(key: key);
 
   /// The first index of the Onboarding, by default it is 0
@@ -73,6 +74,8 @@ class Onboarding extends StatefulWidget {
   /// That property would be used with responsive_framework package,
   /// which scales the widgets
   final double scaleHeight;
+
+  final Widget Function(BuildContext context, Widget stepper)? stepperBuilder;
 
   /// Get the closest Onboarding state in the widget tree
   static OnboardingState? of(BuildContext context,
@@ -160,7 +163,7 @@ class OnboardingState extends State<Onboarding> {
       builder: (BuildContext context) {
         return LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-          return OnboardingStepper(
+          final stepper = OnboardingStepper(
             constraints: constraints,
             initialIndex: initialIndex,
             steps: widget.steps,
@@ -180,6 +183,12 @@ class OnboardingState extends State<Onboarding> {
               hide();
             },
           );
+
+          if (widget.stepperBuilder != null) {
+            return widget.stepperBuilder!(context, stepper);
+          }
+
+          return stepper;
         });
       },
     );
